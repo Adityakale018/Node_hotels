@@ -1,15 +1,14 @@
 const mongoose=require('mongoose');
+require('dotenv').config();
 
 // mongodb connection url
 
-const mongoURL='mongodb://127.0.0.1:27017/hotels'
+//const mongoURL='mongodb://127.0.0.1:27017/hotels'
+const mongoURL=process.env.MONGODB_URL
 
 // setup mongodb connection
 
-mongoose.connect(mongoURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
+mongoose.connect(mongoURL);
 const db=mongoose.connection;
 
 // event listners on databases
@@ -19,7 +18,7 @@ db.on('connected',()=>{
 })
 
 db.on('error',(err)=>{
-    console.err("connected to database server"),err;
+    console.error("connected to database server"),err;
 })
 
 db.on('disconnected',()=>{

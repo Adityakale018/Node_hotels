@@ -7,7 +7,8 @@ const personRoutes = require('./routes/personRoutes');
 app.use('/person',personRoutes);
 const menuRoutes = require('./routes/menuRoutes');
 app.use('/menuitems',menuRoutes);
-
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 
