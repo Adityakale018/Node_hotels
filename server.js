@@ -3,22 +3,41 @@ const app = express()
 app.use(express.json());
 const port = 3000
 const db=require('./db');
-const personRoutes = require('./routes/personRoutes');
-app.use('/person',personRoutes);
-const menuRoutes = require('./routes/menuRoutes');
-app.use('/menuitems',menuRoutes);
+ 
+const person = require('./models/person')
+
+
+
+const passport = require('./auth');
 require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-app.get('/chicken',(req,res)=>{
-    res.send('give me some chicken')
+const logRequest = (req,res,next)=>{
+  console.log(`[${new Date().toLocaleString()}] Request made to : ${req.orginialURL}`);
+  next();
+}
+
+
+app.use(logRequest);
+
+
+
+const localauthmiddleware = passport.authenticate('local',{session:false});
+app.use(passport.initialize());
+//app.get('/',(req, res) => {
+  //res.send('Welcome to our Hotel')
+//})
+app.get('/', function (req,res){
+    res.send('give me some chicken');
 })
 
+const personRoutes = require('./routes/personRoutes');
+const menuRoutes = require('./routes/menuRoutes');
+
+app.use('/menuitems',menuRoutes);
+app.use('/person',personRoutes);
 //post route to add person
 
 /*app.post('/person', async (req,res)=>{
@@ -94,6 +113,7 @@ app.get('/menuitems',async(req,res)=>{
 })*/
 
 
+//Middleware function 
 
 
 app.listen(port, () => {
